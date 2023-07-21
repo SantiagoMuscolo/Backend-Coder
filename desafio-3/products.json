@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "pen",
+    "description": "this is a pen",
+    "price": 200,
+    "thumbnail": "imagen.jpg",
+    "code": 1800,
+    "stock": 5
+  },
+  {
+    "id": 2,
+    "title": "pencil",
+    "description": "this is a pencil",
+    "price": 200,
+    "thumbnail": "imagen.jpg",
+    "code": 1850,
+    "stock": 5
+  },
+  {
+    "id": 3,
+    "title": "stencil",
+    "description": "this is a stencil",
+    "price": 200,
+    "thumbnail": "imagen.jpg",
+    "code": 1500,
+    "stock": 5
+  }
+]
