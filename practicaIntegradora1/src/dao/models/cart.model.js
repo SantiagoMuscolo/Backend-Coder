@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 
+const productSchema = mongoose.Schema({
+    product: Number,
+    quantity: Number
+});
+
 const cartSchema = mongoose.Schema({
     id: Number,
-    proucts: Array
+    products: [productSchema]
 });
+
 
 const cartModel = mongoose.model("carts", cartSchema)
 
