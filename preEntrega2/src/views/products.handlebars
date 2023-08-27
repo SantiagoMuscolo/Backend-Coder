@@ -14,28 +14,29 @@
             {{/each}}
         </ul>
 
-        <div class="mt-3">
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    {{#if hasPrevPage}}
-                    <li class="page-item">
-                        <a class="page-link" href="{{prevLink}}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {{/if}}
+    <div class="mt-3">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {{#if hasPrevPage}}
+            <li class="page-item">
+                <a class="page-link text-black" href="{{prevPageLink}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    {{page}}
+                </a>
+            </li>
+            {{/if}}
 
-                    {{#if hasNextPage}}
-                    <li class="page-item">
-                        <a class="page-link" href="{{nextLink}}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    {{/if}}
-                </ul>
-            </nav>
-        </div>
-    </div>
+            {{#if hasNextPage}}
+            <p class="text-white">batata</p>
+            <li class="page-item">
+                <a class="page-link text-black" href="{{nextPageLink}}" aria-label="Next">
+                    {{page}}
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {{/if}}
+        </ul>
+    </nav>
 </div>
 
 <script>
@@ -43,7 +44,6 @@
     addToCartButtons.forEach(button => {
         button.addEventListener('click', (event) => {
             const productId = event.target.getAttribute('data-product-id');
-            // Implement your add to cart logic here
         });
     });
 </script>
