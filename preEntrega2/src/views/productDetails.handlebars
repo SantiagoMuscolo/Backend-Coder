@@ -1,9 +1,10 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="bg-white rounded p-3 product-details shadow">
-        <h1 class="text-dark">{{product.title}}</h1>
-        <p class="text-muted">{{product.description}}</p>
-        <p class="text-primary">${{product.price}}</p>
+        {{#each product}}
+            <h1 class="text-dark">{{this.title}}</h1>
+            <p class="text-muted">{{this.description}}</p>
+            <p class="text-primary">${{this.price}}</p>
+        {{/each}}
     </div>
 </div>
-
-<script>console.log(this.description)</script>
+<script> console.log("Product object:", {{product}})</script>
