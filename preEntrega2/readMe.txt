@@ -33,13 +33,25 @@ GET:
 http://localhost:8080/api/carts/
 
 POST:
-http://localhost:8080/api/products/
+http://localhost:8080/api/carts/
 
 GET:
-http://localhost:8080/api/products/:cid
+http://localhost:8080/api/carts/:cid
 
 POST:
-http://localhost:8080/api/products/:cid/product/:pid
+http://localhost:8080/api/carts/:cid/product/:pid
+
+DELETE:
+http://localhost:8080/api/carts/:cid/product/:pid
+
+DELETE:
+http://localhost:8080/api/carts/:cid
+
+PUT:
+http://localhost:8080/api/carts/:cid/products/:pid
+
+PUT;
+http://localhost:8080/api/carts/:cid
 
 
 dejo el repositorio de GitHub para tenerlo a disposicion ante culquier necesidad de consulta:
