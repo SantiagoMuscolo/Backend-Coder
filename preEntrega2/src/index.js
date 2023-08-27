@@ -42,6 +42,35 @@ class Server {
             }
         });
 
+        this.app.get('/products', async (req, res) => {
+            try {
+                const pm = require('./dao/products/productsService/productManager')
+                const products = await pm.getProducts();
+                res.render('products', { products });
+            } catch (error) {
+                console.log(`[ERROR] -> ${error}`);
+                res.status(500).json({ error: 'Error al obtener los productos' });
+            }
+        });
+
+        this.app.get('/products/:productId', async (req, res) => {
+            try {
+                const pm = require('./dao/products/productsService/productManager');
+                const productId = parseInt(req.params.productId);
+                const product = await pm.getProductById(productId);
+        
+                if (product) {
+                    res.render('productDetails', { product });
+                    console.log(product)
+                } else {
+                    res.status(404).json({ error: 'Producto no encontrado' });
+                }
+            } catch (error) {
+                console.log(`[ERROR] -> ${error}`);
+                res.status(500).json({ error: 'Error al obtener el producto' });
+            }
+        });
+
         this.app.get('/chatHandlebars', async (req, res) => {
             res.render('chat', {})
         })

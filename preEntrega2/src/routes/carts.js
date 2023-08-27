@@ -13,6 +13,10 @@ module.exports = app => {
     router.get('/', cartsController.getAllCarts);
     router.post('/', cartsController.createCart);
     router.get('/:cid', cartsController.products);
-    router.post('/:cid/product/:pid', cartsController.addProduct);
+    router.post('/:cid/products/:pid', cartsController.addProduct);
+    router.delete('/:cid/products/:pid', cartsController.deleteProductFromCart);
+    router.delete('/:cid', cartsController.deleteProductsFromCart)
+    router.put('/:cid/products/:pid', cartsController.updateProductsQuantity)
+    router.put('/:cid', cartsController.updateProductsInCart);
 }
 
