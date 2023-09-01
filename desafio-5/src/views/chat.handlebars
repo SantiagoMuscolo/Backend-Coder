@@ -1,0 +1,21 @@
+<div class="container my-5">
+    <div class="row mb-3">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="bg-white text-black  text-center p-3 rounded">Handlebars Chat</h1>
+            <input type="text" class="form-control" id="chatBox" placeholder="Ingrese un mensaje...">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div id="messageLogs" class="text-black bg-white rounded p-2"></div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-5 ">
+        <span class="text-black bg-white rounded  p-3 text-center">Ingresa tu primer mensaje y disfruta</span>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="socket.io/socket.io.js"></script>
+<script src="chat/chat.js"></script>
