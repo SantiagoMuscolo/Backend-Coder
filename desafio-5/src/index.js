@@ -9,7 +9,7 @@ const messageModel = require('./dao/models/message.model');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const userManager = require('./dao/users/userService/userService'); 
+const userManager = require('./dao/users/userService/userService');
 const userController = require('./dao/users/userController/userController');
 // const fileStore = require('session-file-store');
 // const __dirname = require('./utils');
@@ -45,10 +45,17 @@ class Server {
             }),
             secret: 'S3cr3t0',
             resave: false,
-            saveUninitialized: false
+            saveUninitialized: true
         }));
         this.app.use(cookieParser());
 
+        this.app.get('/', (req, res) => {
+            if (req.session.user) {
+                console.log(`Ya existo!`)
+            } else {
+                req.session.user = 'validado';
+            }
+        })
 
         this.app.get('/profile', (req, res) => {
             if (userManager.userLogged) {
@@ -58,6 +65,16 @@ class Server {
             } else {
                 res.redirect('login');
             }
+        });
+
+        this.app.post('/logout', (req, res) => {
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error('Error al cerrar sesión:', err);
+                } 
+
+                res.redirect('/');
+            });
         });
     }
 

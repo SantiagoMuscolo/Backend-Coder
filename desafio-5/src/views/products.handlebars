@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="bg-white rounded p-3 product-list flex-column align-items-center shadow">
         <h1 class="text-dark">Product List</h1>
-        <span>Bienvenido {{user.first_name}} {{user.last_name}}!</span>
+        <span>Bienvenido {{user.first_name}} {{user.last_name}}, ROLE: {{user.role}}!</span>
         <ul class="list-group">
             {{#each products}}
             <li class="list-group-item text-dark d-flex justify-content-between align-items-center">
