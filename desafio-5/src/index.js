@@ -10,11 +10,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const userManager = require('./dao/users/userService/userService');
-const userController = require('./dao/users/userController/userController');
-// const fileStore = require('session-file-store');
-// const __dirname = require('./utils');
-
-// const FileStore = fileStore(session)
 
 class Server {
     constructor() {
@@ -50,11 +45,9 @@ class Server {
         this.app.use(cookieParser());
 
         this.app.get('/', (req, res) => {
-            if (req.session.user) {
-                console.log(`Ya existo!`)
-            } else {
+            if (!req.session.user) {
                 req.session.user = 'validado';
-            }
+            } 
         })
 
         this.app.get('/profile', (req, res) => {
@@ -63,7 +56,7 @@ class Server {
                 const user = userManager.userLogged.toObject();
                 res.render('profile', { user });
             } else {
-                res.redirect('login');
+                res.redirect('/');
             }
         });
 
