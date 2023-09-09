@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="card" style="width: 35rem;">
+            <div class="card-body">
+                <h1>Welcome, {{user.first_name}} {{user.last_name}}!</h1>
+                <p>Email: {{user.email}}</p>
+                <p>Role: {{user.role}}</p>
+                <p>Age: {{user.age}}</p>
+            </div>
+            <form method="post" action="/logout">
+                <button type="submit" class="btn btn-danger w-100">Log out</button>
+            </form>
+        </div>
+    </div>
+</div>
