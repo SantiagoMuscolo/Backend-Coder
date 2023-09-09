@@ -41,6 +41,18 @@ http://localhost:8080/api/products/:cid
 POST:
 http://localhost:8080/api/products/:cid/product/:pid
 
+Users: 
+
+GET: 
+(login)
+http://localhost:8080/api/sessions/login
+
+POST:
+(register)
+http://localhost:8080/api/sessions/register
+
+
+*cabe aclarar que son las rutas para testar en postman, las views siguen las pautas establecidas en los documentos de coder*
 
 dejo el repositorio de GitHub para tenerlo a disposicion ante culquier necesidad de consulta:
 https://github.com/SantiagoMuscolo/Backend-Coder/tree/master/practicaIntegradora1
