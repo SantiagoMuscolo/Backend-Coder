@@ -24,14 +24,14 @@ class UserManager {
         }
     }
 
-    async login(username, password) {
+    async login(user, pass) {
         try {
-            this.userLogged =  await userModel.findOne({ email: username, password: password }) || null;
+            this.userLogged =  await userModel.findOne({ email: user, password: pass }) || null;
     
             if (this.userLogged) {
                 console.log('user logged!');
     
-                if (username === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+                if (user === 'adminCoder@coder.com' && pass === 'adminCod3r123') {
                     this.userLogged.role = 'admin'; 
                 } else {
                     this.userLogged.role = 'user'; 

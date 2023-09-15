@@ -1,6 +1,13 @@
 const userManager = require('../userService/userService');
+const generateToken = require('../../../utils/jwt/jwt');
+const jwt = require('jsonwebtoken');
+const express = require('express');
 
 class ProductsController {
+    constructor(){
+        this.app = express()
+    }
+
     async register(req, res) {
         try {
             const userData = req.body;
@@ -8,7 +15,8 @@ class ProductsController {
             const userRegistered = await userManager.addUser(userData);
 
             if (userRegistered) {
-                res.send({ status: "OK", message: userRegistered });
+                let token = generateToken(userRegistered);
+                res.send({ status: "OK", message: userRegistered, token:token });
             } else {
                 res.status(401).send({ status: "Error", message: "No se pudo registrar el Usuario!" });
             }
@@ -19,9 +27,9 @@ class ProductsController {
     }
 
     async login(req, res) {
-        let { username, password } = req.body;
+        let { user, pass } = req.query;
 
-        const userLogged = await userManager.login(username, password);
+        const userLogged = await userManager.login(user, pass);
 
         if (userLogged) {
             res.send({ status: 'OK', message: userLogged })
@@ -29,12 +37,6 @@ class ProductsController {
             res.status(401).send({ status: 'Error', message: 'No se pudo loguear el Usuario!' })
         }
     }
-    async githubCallBack(req, res) {
-        req.session.user = req.user;
-        req.session.loggedIn = true;
-        res.redirect("/products");
-    }
-    
 }
 
 module.exports = new ProductsController();

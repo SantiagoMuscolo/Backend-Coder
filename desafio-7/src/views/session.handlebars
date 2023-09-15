@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <button type="button" class="btn btn-primary m-5" id="logIn">Log In</button>
+        <button type="button" class="btn btn-secondary m-5" id="signUp">Sign In</button>
+        <button type="button" class="btn btn-success m-5" id="Profile">Profile</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById("logIn").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
+<script>
+    document.getElementById("signUp").addEventListener("click", function() {
+        window.location.href = "/register";
+    });
+</script>
+<script>
+    document.getElementById("Profile").addEventListener("click", function() {
+        window.location.href = "/profile";
+    });
+</script>

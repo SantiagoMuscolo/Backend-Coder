@@ -10,6 +10,12 @@ module.exports = (app) => {
         app.engine('handlebars', exphbs.engine());
         app.set('view engine', 'handlebars');
 
+        // app.get('/', async (req, res) => {
+        //     const products = await PM.getProducts()
+        //     console.log(products)
+        //     res.render('home', { products })
+        // });
+
         app.get('/realtimeproducts', async (req, res) => {
             try {
                 const pm = require('../dao/products/productsService/productManager')
@@ -114,20 +120,7 @@ module.exports = (app) => {
             res.render('register')
         })
 
-        app.get('/profile', (req, res) => {
-            if (userManager.userLogged) {
-                const user = userManager.userLogged.toObject();
-                res.render('profile', { user });
-            } else {
-                res.redirect('/');
-            }
-        });
-
-        app.get("/faillogin", async (req, res) => {
-            res.send({status:"error", message:"Login inválido!"});
-        });
-        
-        app.get("/failregister", async (req, res) => {
-            res.send({status:"Error", message:"Error! No se pudo registar el Usuario!"});
-        });
+        // app.get('/profile', (req, res) => {
+        //     res.render('profile')
+        // })
 }

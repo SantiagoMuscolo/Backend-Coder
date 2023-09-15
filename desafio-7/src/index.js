@@ -7,9 +7,11 @@ const routes = require('./routes');
 const mongoose = require('mongoose');
 const messageModel = require('./dao/models/message.model');
 const cookieParser = require('cookie-parser');
-
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const userManager = require('./dao/users/userService/userService');
-
+const passport = require('passport');
+const initializePassport = require('./config/passport.config');
 
 class Server {
     constructor() {
@@ -23,8 +25,6 @@ class Server {
     }
 
     setUp() {
-        
-        this.app.use(cookieParser());
         this.app.set('views', './src/views');
         this.app.use(express.static('public'));
         this.app.use('/socket.io', express.static('node_modules/socket.io/client-dist'));
@@ -34,12 +34,42 @@ class Server {
         this.app.use(express.static(__dirname + "/public"));
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(session({
+            store: MongoStore.create({
+                mongoUrl: "mongodb+srv://santiagoMuscolo:Sanlorenzo2003@codecluster.cjqx2s9.mongodb.net/ecommerce?retryWrites=true&w=majority",
+                mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+                ttl: 20
+            }),
+            secret: 'S3cr3t0',
+            resave: false,
+            saveUninitialized: true
+        }));
+        initializePassport();
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
+        this.app.use(cookieParser());
 
         this.app.get('/', (req, res) => {
             if (!req.session.user) {
                 req.session.user = 'validado';
             }
         })
+
+        this.app.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), (req, res) => {
+            req.session.user = req.user;
+            req.session.loggedIn = true;
+            res.redirect("/products");
+        });
+        
+        this.app.get('/profile', (req, res) => {
+            if (userManager.userLogged) {
+                console.log(userManager.userLogged)
+                const user = userManager.userLogged.toObject();
+                res.render('profile', { user });
+            } else {
+                res.redirect('/');
+            }
+        });
 
         this.app.post('/logout', (req, res) => {
             req.session.destroy((err) => {
@@ -50,6 +80,7 @@ class Server {
                 res.redirect('/');
             });
         });
+
     }
 
     initializeSocket() {

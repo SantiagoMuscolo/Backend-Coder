@@ -1,6 +1,7 @@
 const Passport = require('passport');
 const Local = require('passport-local');
 const GitHubStrategy = require('passport-github2');
+const UserModel = require('../dao/models/user.model');
 const userModel = require('../dao/models/user.model');
 const bcrypt = require("bcrypt");
 
@@ -17,23 +18,29 @@ const initializePassport = () => {
                 const { first_name, last_name, email, age } = req.body;
 
                 try {
-                    let user = await userModel.findOne({ email: username });
+                    let user = await UserModel.findOne({ email: username });
                     if (user) {
                         console.log("El usuario " + email + " ya se encuentra registrado!");
                         return done(null, false);
                     }
 
-                    const hashedPassword = createHash(password);
+                    const hashedPassword = createHash(password); 
 
                     user = {
                         first_name,
                         last_name,
                         email,
                         age,
-                        password: hashedPassword,
+                        password: hashedPassword, 
                     };
 
-                    let result = await userModel.create(user);
+                    console.log(user);
+
+                    if (user.email == "adminCoder@coder.com") {
+                        user.role = "admin";
+                    }
+
+                    let result = await UserModel.create(user);
 
                     if (result) {
                         return done(null, result);
@@ -45,7 +52,7 @@ const initializePassport = () => {
         )
     );
 
-    Passport.use("login", new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
+    Passport.use("/", new LocalStrategy({ passReqToCallback: true, usernameField: "email" }, async (username, password, done) => {
         try {
             let user = await userModel.findOne({ email: username });
             console.log(user);
@@ -54,8 +61,6 @@ const initializePassport = () => {
                 console.log("Error! El usuario no existe!");
                 return done(null, false);
             }
-
-            console.log(isValidPassword(user, password))
 
             if (!isValidPassword(user, password)) {
                 console.log("Error! La contraseña es inválida!");
@@ -68,14 +73,13 @@ const initializePassport = () => {
         }
     }));
 
-
     Passport.use("github", new GitHubStrategy({
         clientID: "Iv1.150877ba9d848d6a",
         clientSecret: "34cd8e43f3dcd56707a368a3d49be8a23209b84f",
         callbackURL: "http://localhost:8080/githubcallback"
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            let user = await userModel.findOne({ email: profile._json.email });
+            let user = await UserModel.findOne({ email: profile._json.email });
 
             if (user) {
                 return done(null, user);
@@ -88,7 +92,7 @@ const initializePassport = () => {
                     password: ""
                 }
 
-                let result = await userModel.create(newUser);
+                let result = await UserModel.create(newUser);
 
                 return done(null, result);
             }
@@ -102,7 +106,7 @@ const initializePassport = () => {
     });
 
     Passport.deserializeUser(async (id, done) => {
-        let user = await userModel.findById(id);
+        let user = await UserModel.findById(id);
         done(null, user);
     });
 }
