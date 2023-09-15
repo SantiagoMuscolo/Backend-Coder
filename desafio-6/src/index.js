@@ -7,9 +7,7 @@ const routes = require('./routes');
 const mongoose = require('mongoose');
 const messageModel = require('./dao/models/message.model');
 const cookieParser = require('cookie-parser');
-
-const userManager = require('./dao/users/userService/userService');
-
+const userManager = require('./dao/users/userService/userService')
 
 class Server {
     constructor() {
@@ -23,7 +21,6 @@ class Server {
     }
 
     setUp() {
-        
         this.app.use(cookieParser());
         this.app.set('views', './src/views');
         this.app.use(express.static('public'));
@@ -40,16 +37,6 @@ class Server {
                 req.session.user = 'validado';
             }
         })
-
-        this.app.post('/logout', (req, res) => {
-            req.session.destroy((err) => {
-                if (err) {
-                    console.error('Error al cerrar sesión:', err);
-                }
-
-                res.redirect('/');
-            });
-        });
     }
 
     initializeSocket() {

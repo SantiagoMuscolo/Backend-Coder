@@ -12,8 +12,11 @@ const registerUser = async () => {
         headers: {"Content-type": "application/json; charset=UTF-8"},
         body: JSON.stringify(user),
     });
-    const data = await response.json();
-    console.log(data);
+    if (response.ok) {
+        window.location.href = "/";
+    } else {
+        console.error("Error de registro");
+    }
 }
 
 document.getElementById("btnRegister").onclick = registerUser;

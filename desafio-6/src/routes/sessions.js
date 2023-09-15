@@ -27,11 +27,24 @@ module.exports = app => {
     app.use('/api/sessions', router);
 
     router.post("/login", passport.authenticate("login", {failureRedirect:"/faillogin"}), async (req, res) => {
-        res.redirect("/products");
+        res.send({ status: 200, message: 'usuario registrado' });
     });
+
     router.post("/register", passport.authenticate("register", {failureRedirect:"/failregister"}), async (req, res) => {
-        res.redirect("/");
+        res.send({ status: "OK", message: 'usuario registrado' });
     });
-    router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => { });
-    router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), userController.githubCallBack)
+
+    router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => {});
+
+    app.use("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), userController.githubCallBack)
+    
+    app.post('/logout', (req, res) => {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error al cerrar sesión:', err);
+            }
+
+            res.redirect('/');
+        });
+    });
 }
