@@ -42,12 +42,13 @@ const initializePassport = () => {
     
                     const hashedPassword = await createHash(password);
 
-                    if (user.email == "adminCoder@coder.com") {
-                        user.role = "admin";
-                    }else{
-                        user.role = "user";
-                    }
-    
+                    // if (user.email == "adminCoder@coder.com") {
+                    //     user.role = "admin";
+                    // }else{
+                    //     user.role = "user";
+                    // }
+                    
+
                     user = {
                         first_name,
                         last_name,
