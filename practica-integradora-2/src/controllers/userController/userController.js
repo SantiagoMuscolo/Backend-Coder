@@ -1,4 +1,4 @@
-const userManager = require('../userService/userService');
+const userManager = require('../../dao/users/userService/userService');
 
 class ProductsController {
     async register(req, res) {

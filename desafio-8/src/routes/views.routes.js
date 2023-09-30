@@ -1,20 +1,19 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
-const PM = require('../dao/products/productsService/productManager');
-const userManager = require('../dao/users/userService/userService')
 const passport = require('passport');
 const initializePassport = require('../config/passport.config');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+require('dotenv').config()
 
 module.exports = (app) => {
     app.use(session({
         store: MongoStore.create({
-            mongoUrl: "mongodb+srv://santiagoMuscolo:Sanlorenzo2003@codecluster.cjqx2s9.mongodb.net/ecommerce?retryWrites=true&w=majority",
+            mongoUrl: process.env.MONGO_URL,
             mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
             ttl: 20
         }),
-        secret: 'S3cr3t0',
+        secret: process.env.MONGO_SECRET,
         resave: false,
         saveUninitialized: true
     }));
@@ -29,9 +28,13 @@ module.exports = (app) => {
 
     app.get('/realtimeproducts', async (req, res) => {
         try {
-            const pm = require('../dao/products/productsService/productManager')
-            const products = await pm.getProducts();
-            res.render('realTimeProducts', { products });
+            if (req.isAuthenticated()) {
+                const pm = require('../dao/products/productsService/productManager')
+                const products = await pm.getProducts();
+                res.render('products/realTimeProducts', { products });
+            } else {
+                res.redirect('/')
+            }
         } catch (error) {
             console.log(`[ERROR] -> ${error}`);
             res.status(500).json({ error: 'Error al obtener los productos' });
@@ -41,37 +44,41 @@ module.exports = (app) => {
 
     app.get('/products', async (req, res) => {
         try {
-            const pm = require('../dao/products/productsService/productManager');
-            const query = req.query.query;
-            const limit = parseInt(req.query.limit) || 10;
-            const page = parseInt(req.query.page) || 1;
-            const sort = req.query.sort === 'desc' ? -1 : 1;
-            let products = await pm.getProducts();
+            if (req.isAuthenticated()) {
+                const pm = require('../dao/products/productsService/productManager');
+                const query = req.query.query;
+                const limit = parseInt(req.query.limit) || 10;
+                const page = parseInt(req.query.page) || 1;
+                const sort = req.query.sort === 'desc' ? -1 : 1;
+                let products = await pm.getProducts();
 
-            if (query) {
-                products = products.filter(product => {
-                    return product.name.includes(query);
+                if (query) {
+                    products = products.filter(product => {
+                        return product.name.includes(query);
+                    });
+                }
+
+                products.sort((a, b) => (a.price - b.price) * sort);
+
+                const startIndex = (page - 1) * limit;
+                const endIndex = startIndex + limit;
+
+                const paginatedProducts = products.slice(startIndex, endIndex);
+                const totalPages = Math.ceil(products.length / limit);
+                const hasPrevPage = page > 1;
+                const hasNextPage = page < totalPages;
+
+                res.render('products/products', {
+                    products: paginatedProducts,
+                    hasPrevPage: hasPrevPage,
+                    hasNextPage: hasNextPage,
+                    nextPageLink: hasNextPage ? `${req.baseUrl}?limit=${limit}&page=${page + 1}` : null,
+                    prevPageLink: hasPrevPage ? `${req.baseUrl}?limit=${limit}&page=${page - 1}` : null,
+                    page: page
                 });
+            } else {
+                res.redirect('/')
             }
-
-            products.sort((a, b) => (a.price - b.price) * sort);
-
-            const startIndex = (page - 1) * limit;
-            const endIndex = startIndex + limit;
-
-            const paginatedProducts = products.slice(startIndex, endIndex);
-            const totalPages = Math.ceil(products.length / limit);
-            const hasPrevPage = page > 1;
-            const hasNextPage = page < totalPages;
-
-            res.render('products', {
-                products: paginatedProducts,
-                hasPrevPage: hasPrevPage,
-                hasNextPage: hasNextPage,
-                nextPageLink: hasNextPage ? `${req.baseUrl}?limit=${limit}&page=${page + 1}` : null,
-                prevPageLink: hasPrevPage ? `${req.baseUrl}?limit=${limit}&page=${page - 1}` : null,
-                page: page
-            });
         } catch (error) {
             console.log(`[ERROR] -> ${error}`);
             res.status(500).json({ error: 'Error al obtener los productos' });
@@ -86,7 +93,7 @@ module.exports = (app) => {
             const product = await pm.getProductById(productId);
 
             if (product) {
-                res.render('productDetails', { product });
+                res.render('products/productDetails', { product });
                 console.log(product)
             } else {
                 res.status(404).json({ error: 'Producto no encontrado' });
@@ -104,7 +111,7 @@ module.exports = (app) => {
             const cartItems = await cart.getProducts(cartId)
 
             if (cartItems) {
-                res.render('cart', { cartItems });
+                res.render('cart/cart', { cartItems });
             } else {
                 res.status(404).json({ error: 'Producto no encontrado' });
             }
@@ -116,19 +123,19 @@ module.exports = (app) => {
     });
 
     app.get('/chatHandlebars', async (req, res) => {
-        res.render('chat', {})
+        res.render('chat/chat', {})
     })
 
     app.get('/sessions', (req, res) => {
-        res.render('session')
+        res.render('user/session')
     });
 
     app.get('/', (req, res) => {
-        res.render('login')
+        res.render('user/login')
     });
 
     app.get('/register', (req, res) => {
-        res.render('register')
+        res.render('user/register')
     })
 
     app.get("/faillogin", async (req, res) => {
@@ -142,7 +149,7 @@ module.exports = (app) => {
     app.get('/profile', (req, res) => {
         if (req.isAuthenticated()) {
             const user = req.user;
-            res.render('profile', { user });
+            res.render('user/profile', { ...user });
         } else {
             res.redirect('/');
         }

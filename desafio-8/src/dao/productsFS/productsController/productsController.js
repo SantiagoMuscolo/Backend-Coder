@@ -1,55 +1,26 @@
 const productManager = require('../productsService/productManager');
-const querystring = require('querystring'); 
 
 class ProductsController {
     async getProducts(req, res) {
         try {
-            const limit = parseInt(req.query.limit) || 10;
-            const page = parseInt(req.query.page) || 1;
-            const sort = req.query.sort === 'desc' ? -1 : 1;
-            const query = req.query.query ? { title: { $regex: req.query.query, $options: 'i' } } : {};
+            const limit = req.query.limit;
+            const products = await productManager.getProducts();
 
-            const skip = (page - 1) * limit;
+            let response = products;
 
-            const aggregationPipeline = [
-                { $match: query },
-                { $sort: { price: sort } },
-                { $skip: skip },
-                { $limit: limit }
-            ];
+            if (limit) {
+                const parsedLimit = parseInt(limit, 10);
 
-            const [products, totalProducts] = await Promise.all([
-                productManager.aggregateProducts(aggregationPipeline),
-                productManager.countProducts(query)
-            ]);
-
-            const totalPages = Math.ceil(totalProducts / limit);
-            const hasPrevPage = page > 1;
-            const hasNextPage = page < totalPages;
-            const prevPage = hasPrevPage ? page - 1 : null;
-            const nextPage = hasNextPage ? page + 1 : null;
-
-            const queryString = querystring.stringify(query); 
-
-            const response = {
-                status: 'success',
-                payload: products,
-                totalpages: totalPages,
-                prevPage,
-                nextPage,
-                page,
-                hasPrevPage,
-                hasNextPage,
-                prevLink: hasPrevPage ? `${req.baseUrl}?limit=${limit}&page=${prevPage}&sort=${sort}&query=${queryString}` : null,
-                nextLink: hasNextPage ? `${req.baseUrl}?limit=${limit}&page=${nextPage}&sort=${sort}&query=${queryString}` : null
-            };
+                if (!isNaN(parsedLimit)) {
+                    response = products.slice(0, parsedLimit);
+                }
+            }
 
             res.json(response);
         } catch (error) {
-            res.status(500).json({ error: `${error}` });
+            res.status(500).json({ error: 'Error al obtener los productos' });
         }
     }
-
 
     async getProductById(req, res) {
         try {
@@ -71,7 +42,7 @@ class ProductsController {
             const productData = req.body;
 
             const newProduct = await productManager.addProduct(productData);
-            if (newProduct == 'Producto invalido!') {
+            if (newProduct === 'Producto invalido!') {
                 res.status(400).json({ error: 'Producto invalido' });
             } else {
                 res.status(201).json(newProduct);
@@ -84,9 +55,9 @@ class ProductsController {
     async updateProduct(req, res) {
         try {
             const productId = parseInt(req.params.pid);
-            const product = req.body;
+            const updateFields = req.body;
 
-            if (Object.keys(product).length === 0) {
+            if (Object.keys(updateFields).length === 0) {
                 return res.status(400).json({ error: 'Se debe enviar al menos un campo para actualizar' });
             }
 
@@ -95,10 +66,15 @@ class ProductsController {
                 return res.status(404).json({ error: 'Producto no encontrado' });
             }
 
-            const updatedIt = await productManager.updateProduct(productId, product);
+            for (const field in updateFields) {
+                if (updateFields.hasOwnProperty(field)) {
+                    await productManager.updateProduct(productId, field, updateFields[field]);
+                }
+            }
 
-            res.json(updatedIt)
+            const updatedProduct = await productManager.getProductById(productId);
 
+            res.json(updatedProduct);
         } catch (error) {
             res.status(500).json({ error: 'Error al actualizar el producto' });
         }
