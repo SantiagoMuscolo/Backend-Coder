@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const productsController = require('../dao/products/productsController/productsController');
+const productsController = require('../controllers/productsController/productsController');
 const bodyParser = require("body-parser");
 
 module.exports = app => {

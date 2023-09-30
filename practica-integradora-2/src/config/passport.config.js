@@ -23,12 +23,18 @@ const initializePassport = () => {
 
           const hashedPassword = await createHash(password);
 
+          let role = 'user'; 
+          if (email === 'adminCoder@coder.com') {
+            role = 'admin'; 
+          }
+
           user = {
             first_name,
             last_name,
             email,
             age,
             password: hashedPassword,
+            role,
           };
 
           let result = await userModel.create(user);

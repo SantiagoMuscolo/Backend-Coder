@@ -31,7 +31,7 @@ module.exports = (app) => {
         try {
             const pm = require('../dao/products/productsService/productManager')
             const products = await pm.getProducts();
-            res.render('realTimeProducts', { products });
+            res.render('products/realTimeProducts', { products });
         } catch (error) {
             console.log(`[ERROR] -> ${error}`);
             res.status(500).json({ error: 'Error al obtener los productos' });
@@ -64,7 +64,7 @@ module.exports = (app) => {
             const hasPrevPage = page > 1;
             const hasNextPage = page < totalPages;
 
-            res.render('products', {
+            res.render('products/products', {
                 products: paginatedProducts,
                 hasPrevPage: hasPrevPage,
                 hasNextPage: hasNextPage,
@@ -86,7 +86,7 @@ module.exports = (app) => {
             const product = await pm.getProductById(productId);
 
             if (product) {
-                res.render('productDetails', { product });
+                res.render('products/productDetails', { product });
                 console.log(product)
             } else {
                 res.status(404).json({ error: 'Producto no encontrado' });
@@ -104,7 +104,7 @@ module.exports = (app) => {
             const cartItems = await cart.getProducts(cartId)
 
             if (cartItems) {
-                res.render('cart', { cartItems });
+                res.render('cart/cart', { cartItems });
             } else {
                 res.status(404).json({ error: 'Producto no encontrado' });
             }
@@ -116,19 +116,19 @@ module.exports = (app) => {
     });
 
     app.get('/chatHandlebars', async (req, res) => {
-        res.render('chat', {})
+        res.render('chat/chat', {})
     })
 
     app.get('/sessions', (req, res) => {
-        res.render('session')
+        res.render('user/session')
     });
 
     app.get('/', (req, res) => {
-        res.render('login')
+        res.render('user/login')
     });
 
     app.get('/register', (req, res) => {
-        res.render('register')
+        res.render('user/register')
     })
 
     app.get("/faillogin", async (req, res) => {
@@ -141,8 +141,8 @@ module.exports = (app) => {
 
     app.get('/profile', (req, res) => {
         if (req.isAuthenticated()) {
-            const user = req.user.toObject();
-            res.render('profile', { user });
+            const user = req.user;
+            res.render('user/profile', { ...user });
         } else {
             res.redirect('/');
         }

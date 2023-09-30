@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const userController = require('../dao/users/userController/userController');
+const userController = require('../controllers/userController/userController');
 const bodyParser = require("body-parser");
 const passport = require('passport');
 const initializePassport = require('../config/passport.config');
