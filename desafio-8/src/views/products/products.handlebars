@@ -13,37 +13,37 @@
             </li>
             {{/each}}
         </ul>
+        <a href="/products/{{this.id}}" class="btn btn-primary btn-sm">View Details</a>
+        <div class="mt-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {{#if hasPrevPage}}
+                    <li class="page-item">
+                        <a class="page-link text-black" href="{{prevPageLink}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            {{page}}
+                        </a>
+                    </li>
+                    {{/if}}
 
-    <div class="mt-3">
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            {{#if hasPrevPage}}
-            <li class="page-item">
-                <a class="page-link text-black" href="{{prevPageLink}}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    {{page}}
-                </a>
-            </li>
-            {{/if}}
+                    {{#if hasNextPage}}
+                    <p class="text-white">batata</p>
+                    <li class="page-item">
+                        <a class="page-link text-black" href="{{nextPageLink}}" aria-label="Next">
+                            {{page}}
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {{/if}}
+                </ul>
+            </nav>
+        </div>
 
-            {{#if hasNextPage}}
-            <p class="text-white">batata</p>
-            <li class="page-item">
-                <a class="page-link text-black" href="{{nextPageLink}}" aria-label="Next">
-                    {{page}}
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-            {{/if}}
-        </ul>
-    </nav>
-</div>
-
-<script>
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const productId = event.target.getAttribute('data-product-id');
-        });
-    });
-</script>
+        <script>
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const productId = event.target.getAttribute('data-product-id');
+                });
+            });
+        </script>
