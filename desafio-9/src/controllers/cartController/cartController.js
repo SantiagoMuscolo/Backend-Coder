@@ -1,5 +1,7 @@
 const CartRepository = require('../../dao/cart/cartRepository/cartRepository');
-const querystring = require('querystring');
+const CustomError = require('../../services/errors/CustomError');
+const EErrors = require('../../services/errors/enums');
+const { generateParamErrorInfo } = require('../../services/errors/info');
 
 class CartController {
   async getAllCarts(req, res) {
@@ -13,7 +15,6 @@ class CartController {
 
   async createCart(req, res) {
     try {
-      const { products } = req.body;
       const newCart = await CartRepository.createCart();
       res.json(newCart);
     } catch (error) {
@@ -22,12 +23,24 @@ class CartController {
   }
 
   async products(req, res) {
+    let cartId;
+
     try {
-      const cartId = req.params.cid;
+      cartId = req.params.cid;
+
+      if (!cartId || isNaN(cartId)) {
+        CustomError.createError({
+          name: "Product update error",
+          cause: generateParamErrorInfo(cartId),
+          message: `The param is invalid`,
+          code: EErrors.INVALID_TYPES_ERROR
+        });
+      }
+
       const products = await CartRepository.getProducts(cartId);
       res.json(products);
     } catch (error) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(cartId) , error: error.message });
     }
   }
 
@@ -35,6 +48,16 @@ class CartController {
     try {
       const cartId = req.params.cid;
       const productId = req.params.pid;
+
+      if (!cartId || isNaN(cartId)) {
+        CustomError.createError({
+          name: "Product update error",
+          cause: generateParamErrorInfo(cartId),
+          message: `The param ${cartId} is invalid`,
+          code: EErrors.INVALID_TYPES_ERROR
+        });
+      }
+
       const cart = await CartRepository.addProduct(cartId, productId);
 
       if (cart) {
@@ -43,7 +66,7 @@ class CartController {
         res.status(500).json({ error: 'Error al subir el producto' });
       }
     } catch (error) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(cartId) , error: error.message });
     }
   }
 
@@ -51,20 +74,40 @@ class CartController {
     try {
       const cartId = req.params.cid;
       const productId = req.params.pid;
+
+      if (!cartId || isNaN(cartId)) {
+        CustomError.createError({
+          name: "Product update error",
+          cause: generateParamErrorInfo(cartId),
+          message: `The param ${cartId} is invalid`,
+          code: EErrors.INVALID_TYPES_ERROR
+        });
+      }
+
       await CartRepository.deleteProduct(cartId, productId);
       res.status(200).json({ message: 'Producto eliminado exitosamente' });
     } catch (error) {
-      res.status(500).json({ error: 'Error al eliminar el producto' });
+      res.status(500).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(cartId) , error: error.message });
     }
   }
 
   async deleteProductsFromCart(req, res) {
     try {
       const cartId = req.params.cid;
+
+      if (!cartId || isNaN(cartId)) {
+        CustomError.createError({
+          name: "Product update error",
+          cause: generateParamErrorInfo(cartId),
+          message: `The param ${cartId} is invalid`,
+          code: EErrors.INVALID_TYPES_ERROR
+        });
+      }
+
       await CartRepository.deleteProductsFromCart(cartId);
       res.status(200).json({ message: 'Productos eliminados exitosamente' });
     } catch (error) {
-      res.status(500).json({ error: 'Error al eliminar los productos' });
+      res.status(500).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(cartId) , error: error.message });
     }
   }
 
@@ -72,6 +115,16 @@ class CartController {
     try {
       const cartId = req.params.cid;
       const { newProducts } = req.body;
+
+      if (!cartId || isNaN(cartId)) {
+        CustomError.createError({
+          name: "Product update error",
+          cause: generateParamErrorInfo(cartId),
+          message: `The param ${cartId} is invalid`,
+          code: EErrors.INVALID_TYPES_ERROR
+        });
+      }
+
       const cart = await CartRepository.updateProducts(cartId, newProducts);
       const totalPages = 1;
       const prevPage = null;
@@ -97,7 +150,7 @@ class CartController {
 
       res.status(200).json(response);
     } catch (error) {
-      res.status(500).json({ status: 'error', message: `${error}` });
+      res.status(500).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(cartId) , error: error.message });
     }
   }
 
@@ -106,10 +159,20 @@ class CartController {
       const cartId = req.params.cid;
       const productId = req.params.pid;
       const { quantity } = req.body;
+
+      if (!cartId || isNaN(cartId)) {
+        CustomError.createError({
+          name: "Product update error",
+          cause: generateParamErrorInfo(cartId),
+          message: `The param ${cartId} is invalid`,
+          code: EErrors.INVALID_TYPES_ERROR
+        });
+      }
+
       const cart = await CartRepository.updateProductsQuantity(cartId, productId, quantity);
       res.status(200).json({ message: 'Cantidad de producto actualizada exitosamente', cart });
     } catch (error) {
-      res.status(500).json({ error: `${error}` });
+      res.status(500).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(cartId) , error: error.message });
     }
   }
 
@@ -117,10 +180,19 @@ class CartController {
     try {
       const cartId = req.params.cid;
 
+      if (!cartId || isNaN(cartId)) {
+        CustomError.createError({
+          name: "Product update error",
+          cause: generateParamErrorInfo(cartId),
+          message: `The param ${cartId} is invalid`,
+          code: EErrors.INVALID_TYPES_ERROR
+        });
+      }
+
       const cart = await CartRepository.getCartById(cartId);
       
       if (!cart) {
-        return res.status(404).json({ error: 'Carrito no encontrado' });
+        return res.status(404).json({ error: error.message});
       }
 
       for (const product of cart.products) {
@@ -138,7 +210,7 @@ class CartController {
 
       res.status(200).json({ message: 'Compra realizada con éxito' });
     } catch (error) {
-      res.status(500).json({ error: 'Error al procesar la compra' });
+      res.status(500).json({code: EErrors.INVALID_PARAM , error: error.message });
     }
   }
 }

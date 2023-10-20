@@ -1,7 +1,7 @@
 const ProductRepository = require('../../dao/products/productRepository/productRepository');
 const CustomError = require('../../services/errors/CustomError');
 const EErrors = require('../../services/errors/enums');
-const { generateParamErrorInfo } = require('../../services/errors/info');
+const { generateParamErrorInfo, generateProductErrorInfo } = require('../../services/errors/info');
 const productRepository = new ProductRepository();
 
 class ProductsController {
@@ -60,15 +60,17 @@ class ProductsController {
   }
 
   async getProductById(req, res) {
+    let productId;
+
     try {
-      const productId = parseInt(req.params.pid);
+      productId = parseInt(req.params.pid);
 
       if (!productId || isNaN(productId)) {
         CustomError.createError({
           name: "Product update error",
           cause: generateParamErrorInfo(productId),
-          message: `The param must be a number`,
-          code: EErrors.INVALID_TYPES_ERROR
+          message: `The param ${productId} must be a number`,
+          code: EErrors.INVALID_PARAM
         });
       }
 
@@ -80,13 +82,15 @@ class ProductsController {
         res.status(404).json({ error: 'Producto no encontrado' });
       }
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({code: EErrors.INVALID_PARAM, cause: generateParamErrorInfo(productId) , error: error.message });
     }
   }
 
   async addProduct(req, res) {
+    let productData;
+
     try {
-      const productData = req.body;
+      productData = req.body;
       const requiredFields = ['title', 'description', 'price', 'thumbnails', 'code', 'stock'];
 
       for (const field of requiredFields) {
@@ -107,21 +111,23 @@ class ProductsController {
         res.status(201).json(newProduct);
       }
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({code: EErrors.INVALID_TYPES_ERROR , cause: generateProductErrorInfo(productData), error: error.message });
     }
   }
 
   async updateProduct(req, res) {
+    let productId;
+
     try {
-      const productId = parseInt(req.params.pid);
+      productId = parseInt(req.params.pid);
       const product = req.body;
       
       if (!productId || isNaN(productId)) {
         CustomError.createError({
           name: "Product update error",
           cause: generateParamErrorInfo(productId),
-          message: `The param must be a number`,
-          code: EErrors.INVALID_TYPES_ERROR
+          message: `The param ${productId} must be a number`,
+          code: EErrors.INVALID_PARAM
         });
       }
       
@@ -138,20 +144,22 @@ class ProductsController {
 
       res.json(updatedProduct);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(productId),  error: error.message });
     }
   }
 
   async deleteProduct(req, res) {
+    let productId;
+
     try {
-      const productId = parseInt(req.params.pid);
+      productId = parseInt(req.params.pid);
 
       if (!productId || isNaN(productId)) {
         CustomError.createError({
           name: "Product update error",
           cause: generateParamErrorInfo(productId),
-          message: `The param must be a number`,
-          code: EErrors.INVALID_TYPES_ERROR
+          message: `The param ${productId} must be a number`,
+          code: EErrors.INVALID_PARAM
         });
       }
 
@@ -164,7 +172,7 @@ class ProductsController {
 
       res.status(204).end();
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({code: EErrors.INVALID_PARAM , cause: generateParamErrorInfo(productId),  error: error.message });
     }
   }
 }

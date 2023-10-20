@@ -24,7 +24,7 @@ class CartRepository {
 
   async getProducts(cartId) {
     try {
-      const cart = await CartModel.findOne({ _id: cartId }).populate('products.product').lean();
+      const cart = await CartModel.findOne({ id: cartId }).populate('products.product').lean();
 
       if (!cart) {
         return [];
@@ -38,7 +38,7 @@ class CartRepository {
 
   async addProduct(cartId, productId) {
     try {
-      const cart = await CartModel.findOne({ _id: cartId });
+      const cart = await CartModel.findOne({ id: cartId });
       console.log(cart)
 
       if (!cart) {
@@ -65,7 +65,7 @@ class CartRepository {
 
   async deleteProduct(cartId, productId) {
     try {
-      const cart = await CartModel.findOne({ _id: cartId });
+      const cart = await CartModel.findOne({ id: cartId });
 
       if (!cart) {
         throw new Error('Carrito no encontrado');
@@ -89,7 +89,7 @@ class CartRepository {
 
   async deleteProductsFromCart(cartId) {
     try {
-      const cart = await CartModel.findOne({ _id: cartId });
+      const cart = await CartModel.findOne({ id: cartId });
 
       if (!cart) {
         throw new Error('Carrito no encontrado');
@@ -105,7 +105,7 @@ class CartRepository {
 
   async updateProductsQuantity(cartId, productId, newQuantity) {
     try {
-      const cart = await CartModel.findOne({ _id: cartId });
+      const cart = await CartModel.findOne({ id: cartId });
 
       if (!cart) {
         throw new Error('Carrito no encontrado');
@@ -129,7 +129,7 @@ class CartRepository {
 
   async updateProducts(cartId, newProducts) {
     try {
-      const cart = await CartModel.findOne({ _id: cartId });
+      const cart = await CartModel.findOne({ id: cartId });
 
       if (!cart) {
         throw new Error('Carrito no encontrado');

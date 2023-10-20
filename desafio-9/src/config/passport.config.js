@@ -24,7 +24,7 @@ const initializePassport = () => {
             CustomError.createError({
               name: "user register error",
               cause: generateUserErrorInfo(req.body),
-              message: `fail to register`,
+              message: `All fields must be completed`,
               code: EErrors.INVALID_TYPES_ERROR
             });
           }
