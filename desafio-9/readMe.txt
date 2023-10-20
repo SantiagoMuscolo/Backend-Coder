@@ -1,4 +1,4 @@
-el proyecto cuenta con 3 rutas actualmente:
+el proyecto cuenta con 4 rutas actualmente:
 
 el home con la lista de productos sin socket: "/",
 la lista con socket denominada realtimeproducts: "/realTimeProducts",
@@ -40,6 +40,13 @@ http://localhost:8080/api/products/:cid
 
 POST:
 http://localhost:8080/api/products/:cid/product/:pid
+
+
+Mock:
+ruta base /api/mock/
+
+GET:
+http://localhost:8080/api/mock/mockingproducts
 
 
 dejo el repositorio de GitHub para tenerlo a disposicion ante culquier necesidad de consulta:
