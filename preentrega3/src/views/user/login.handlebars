@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="col-md-4 oofset-md-4">
+            <h1 class="text-white">Sign in!</h1>
+            <form>
+                <div class="mb-3">
+                    <label class="form-label text-white">Usuario</label>
+                    <input type="text" class="form-control" id="email"/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Contraseña</label>
+                    <input type="password" class="form-control" id="password"/>
+                </div>
+                <button type="button" class="btn btn-primary" id="btnLogIn">Sign in</button>
+                <button type="button" class="btn btn-primary" id="btnRegister">Sign up</button>
+                <button type="button" class="btn btn-secondary"><a href="/githubcallback" class="text-decoration-none text-white"><i class="fab fa-github"></i> Sign In with GitHub</a></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="login/login.js"></script>
+<script>
+    document.getElementById("btnRegister").addEventListener("click", function() {
+        window.location.href = "/register";
+    });
+</script>
