@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Detalles del Carrito</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1>Detalles del Carrito</h1>
+
+        <h2>Productos en el carrito:</h2>
+        <ul class="list-group pt-5">
+            {{#each cartItems}}
+            <li class="list-group-item text-black">
+                <h2>{{this.product.email}}</h2>
+                <strong>{{this.product.title}}</strong> - Precio: ${{this.product.price}}
+            </li>
+            {{/each}}
+        </ul>
+        <button id="finalizarCompra" cart-id="{{this.id}}">Finalizar compra</button>
+    </div>
+
+    <script>
+        const getBtn = document.getElementById('finalizarCompra');
+        getBtn.addEventListener('click', async function() {
+            const res = await fetch(`/api/carts/${this.getAttribute('cart-id')}/purchase`);
+            window.location.href = "/checkout";
+        })
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
