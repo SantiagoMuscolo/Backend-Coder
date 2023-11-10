@@ -1,0 +1,13 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="bg-white rounded p-3 product-details shadow">
+        {{#each product}}
+            <h1 class="text-dark">{{this.title}}</h1>
+            <p class="text-muted">{{this.description}}</p>
+            <p class="text-primary">${{this.price}}</p>
+            <p class="text-primary">Stock: {{this.stock}}</p>
+        {{/each}}
+        <a class="page-link btn btn-secondary text-white bg-black" href="/products" aria-label="Next">
+                    <span aria-hidden="true">Home</span>
+        </a>
+    </div>
+</div>
