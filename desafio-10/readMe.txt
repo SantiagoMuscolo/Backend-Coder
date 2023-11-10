@@ -41,6 +41,11 @@ http://localhost:8080/api/products/:cid
 POST:
 http://localhost:8080/api/products/:cid/product/:pid
 
+Ruta para probar el logger:
+http://localhost:8080/loggerTest
+
+Comando para manejar el enviroment en el que se inicia la app: 
+nodemon index.js --mode develop || nodemon index.js --mode production
 
 dejo el repositorio de GitHub para tenerlo a disposicion ante culquier necesidad de consulta:
 https://github.com/SantiagoMuscolo/Backend-Coder/tree/master/practicaIntegradora1
