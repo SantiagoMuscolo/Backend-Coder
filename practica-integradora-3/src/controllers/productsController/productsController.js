@@ -150,7 +150,9 @@ class ProductsController {
       const existingProduct = await productRepository.getProductById(productId);
       if (!existingProduct) return res.status(404).json({ error: 'Producto no encontrado' });
       if (existingProduct[0].owner === owner) {
+        console.log('hello')
         await productRepository.deleteProduct(productId);
+        
         res.status(204).end();
       } else {
         res.status(403).json({ error: 'No tienes permisos para borrar este producto.' });

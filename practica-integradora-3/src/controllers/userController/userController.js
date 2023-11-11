@@ -3,6 +3,7 @@ const querystring = require('querystring');
 const userRepository = new UserRepository();
 const passport = require('passport');
 const transporter = require('../../config/mailer')
+const crypto = require('crypto');
 
 class UserController {
   async register(req, res) {
@@ -45,8 +46,6 @@ class UserController {
 
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpiration = resetExpiration;
-
-      await userRepository.saveUser(user);
 
       const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 

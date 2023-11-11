@@ -58,7 +58,7 @@ const initializePassport = () => {
       let user = await userModel.findOne({ email: username });
       if (!user) return done(null, false);
       if (!isValidPassword(user, password)) return done(null, false);
-      const token = jwt.sign({ email: user.email, cart: user.cart._id }, 'secret123');
+      const token = jwt.sign({ email: user.email, cart: user.cart?._id }, 'secret123');
       return done(null, { user, token });
     } catch (error) {
       return done(error);

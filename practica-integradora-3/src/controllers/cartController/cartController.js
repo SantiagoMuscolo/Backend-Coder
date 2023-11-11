@@ -51,6 +51,7 @@ class CartController {
       const owner = req.user.user.email
       const product = req.body;
       const cart = await CartRepository.addProductToCart(cartId, product, owner);
+      console.log('here')
       if (cart) res.status(200).json({ message: 'Producto subido exitosamente!' });
       else res.status(500).json({ error: 'Error al subir el producto' });
     } catch (error) {
