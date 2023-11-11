@@ -48,10 +48,12 @@ class CartController {
   async addProduct(req, res) {
     try {
       const cartId = req.user?.user.cart._id;
-      const owner = req.user.user.email
-      const product = req.body;
+      const owner = req.user.user.email 
+      const product = req.body.id;
+      console.log(product)
       const cart = await CartRepository.addProductToCart(cartId, product, owner);
-      console.log('here')
+
+     
       if (cart) res.status(200).json({ message: 'Producto subido exitosamente!' });
       else res.status(500).json({ error: 'Error al subir el producto' });
     } catch (error) {

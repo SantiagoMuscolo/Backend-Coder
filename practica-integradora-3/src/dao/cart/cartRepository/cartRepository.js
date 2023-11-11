@@ -58,7 +58,7 @@ class CartRepository {
       if (isOwnerProduct) return 'Este producto le pertenece';
       const cart = await CartModel.findOne({ _id: cartId });
       if (!cart) throw new Error('Carrito no encontrado');
-      const existingProduct = cart.products.find((product) => product.product._id.toString() === productId.id);
+      const existingProduct = cart?.products.find((product) => product._id.toString() === productId.id);
       if (existingProduct) existingProduct.quantity += 1;
       else cart.products.push({ product: productId, quantity: 1 });
       await cart.save();
