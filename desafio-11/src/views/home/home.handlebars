@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="bg-white rounded p-3 product-list flex-column align-items-center">
+        <h1 class="text-black">Products List</h1>
+        <ul class="list-unstyled mt-5">
+            {{#each products}}
+            <li>{{this.title}}</li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
