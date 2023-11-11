@@ -50,3 +50,5 @@ nodemon index.js --mode develop || nodemon index.js --mode production
 dejo el repositorio de GitHub para tenerlo a disposicion ante culquier necesidad de consulta:
 https://github.com/SantiagoMuscolo/Backend-Coder/tree/master/practicaIntegradora1
 
+SWAGGER: 
+url: /apidocs
