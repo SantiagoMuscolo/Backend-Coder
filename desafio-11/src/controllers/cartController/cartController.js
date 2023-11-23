@@ -201,6 +201,7 @@ class CartController {
       }
 
       for (const product of cart) {
+        console.log(product)
         const productInfo = product.product;
         if (product.quantity > productInfo.stock) {
           return res.status(400).json({ error: `No hay suficiente stock para el producto ${product.product}` });

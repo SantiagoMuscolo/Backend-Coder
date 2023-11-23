@@ -22,8 +22,6 @@ class CartRepository {
   async getCart(cartId) {
     try {
       const cart = await CartModel.findOne({ _id: cartId }).lean();
-      console.log('llegue aca');
-      console.log(cart, 'carrito');
       if (!cart) {
         return [];
       }

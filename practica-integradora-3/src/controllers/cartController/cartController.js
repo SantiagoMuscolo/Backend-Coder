@@ -190,10 +190,9 @@ class CartController {
 }
 
   async purchase(req, res) {
-    
-
     try {
       const cartId = req.params.cid;
+      console.log(cartId)
       const cart = await CartRepository.getProducts(cartId);
 
       if (!cart) {

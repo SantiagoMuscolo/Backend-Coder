@@ -1,4 +1,5 @@
 const CartModel = require('../../models/cart.model');
+const productModel = require('../../models/product.model');
 
 class CartRepository {
   async getAllCarts() {
@@ -12,7 +13,9 @@ class CartRepository {
   async createCart() {
     try {
       const newCart = await CartModel.create({ products: [] });
+      console.log(newCart)
       const cartId = newCart._id;
+      console.log(cartId)
       return cartId;
     } catch (error) {
       throw error;
@@ -22,11 +25,7 @@ class CartRepository {
   async getCart(cartId) {
     try {
       const cart = await CartModel.findOne({ _id: cartId }).lean();
-      
-      if (!cart) {
-        return [];
-      }
-
+      if (!cart) return [];
       return cart.products;
     } catch (error) {
       throw error;
@@ -35,39 +34,36 @@ class CartRepository {
 
   async getProducts(cartId) {
     try {
-      console.log(cartId)
-        const cart = await CartModel.findOne({ _id: cartId }).populate("products.product").lean();
-
-        if (!cart) {
-            return [];
-        }
-
-        return cart.products;
+      const cart = await CartModel.findOne({ _id: cartId }).populate("products.product").lean();
+      if (!cart) {
+        return [];
+      }
+      return cart.products;
     } catch (error) {
-        console.log(`[ERROR] -> ${error}`);
+      console.log(`[ERROR] -> ${error}`);
     }
-}
-
-async getProductInfo(productId) {
-  try {
-    const productInfo = await CartModel.findById(productId).lean();
-    return productInfo;
-  } catch (error) {
-    throw error;
   }
-}
 
-  async addProductToCart(cartId, productId) {
+  async getProductInfo(productId) {
     try {
+      const productInfo = await CartModel.findById(productId).lean();
+      return productInfo;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async addProductToCart(cartId, productId, owner) {
+    try {
+      const findProduct = await productModel.find({ owner: { $in: [owner] } });
+      const isOwnerProduct = findProduct.some(product => product._id.toString() === productId.id);
+      if (isOwnerProduct) return 'Este producto le pertenece';
       const cart = await CartModel.findOne({ _id: cartId });
       if (!cart) throw new Error('Carrito no encontrado');
-      const existingProduct = cart.products.find((product) => product.product._id.toString() === productId);
-
+      const existingProduct = cart?.products.find((product) => product._id.toString() === productId.id);
       if (existingProduct) existingProduct.quantity += 1;
       else cart.products.push({ product: productId, quantity: 1 });
-
       await cart.save();
-
       return cart;
     } catch (error) {
       throw error;
@@ -77,21 +73,11 @@ async getProductInfo(productId) {
   async deleteProduct(cartId, productId) {
     try {
       const cart = await CartModel.findOne({ _id: cartId });
-
-      if (!cart) {
-        throw new Error('Carrito no encontrado');
-      }
-
+      if (!cart) throw new Error('Carrito no encontrado');
       const productIndex = cart.products.findIndex((product) => product.product.toString() === productId);
-
-      if (productIndex === -1) {
-        throw new Error('Producto no encontrado en el carrito');
-      }
-
+      if (productIndex === -1) throw new Error('Producto no encontrado en el carrito');
       cart.products.splice(productIndex, 1);
-
       await cart.save();
-
       return cart;
     } catch (error) {
       throw error;
@@ -101,13 +87,10 @@ async getProductInfo(productId) {
   async deleteProductsFromCart(cartId) {
     try {
       const cart = await CartModel.findOne({ _id: cartId });
-
       if (!cart) {
         throw new Error('Carrito no encontrado');
       }
-
       cart.products = [];
-
       await cart.save();
     } catch (error) {
       throw error;
@@ -141,7 +124,6 @@ async getProductInfo(productId) {
   async updateProducts(cartId, newProducts) {
     try {
       const cart = await CartModel.findOne({ _id: cartId });
-
       if (!cart) {
         throw new Error('Carrito no encontrado');
       }
@@ -152,9 +134,7 @@ async getProductInfo(productId) {
       }));
 
       cart.products = formattedProducts;
-
       await cart.save();
-
       return cart;
     } catch (error) {
       throw error;

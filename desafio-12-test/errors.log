@@ -1,0 +1,54 @@
+debug: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:15:58
+http: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:16:15
+info: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:16:29
+warning: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:16:42
+info: GET en /loggerTest - at 25/10/2023 - 12:16:58
+error: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:17:13
+info: GET en /loggerTest - at 25/10/2023 - 12:17:43
+info: GET en /loggerTest - at 25/10/2023 - 12:18:50
+error: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:19:05
+error: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:19:12
+fatal: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:21:44
+info: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:21:52
+info: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:21:55
+warning: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:22:03
+error: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:22:10
+fatal: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:22:19
+http: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:22:42
+http: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:22:50
+info: GET en /loggerTest - at 25/10/2023 - 12:22:54
+info: GET en /loggerTest - at 25/10/2023 - 12:23:06
+debug: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:23:13
+http: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:23:18
+http: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:23:21
+info: GET en /loggerTest - at 25/10/2023 - 12:26:16
+info: GET en /loggerTest - at 25/10/2023 - 12:26:32
+info: GET en /loggerTest - at 25/10/2023 - 12:26:35
+info: GET en /loggerTest - at 25/10/2023 - 12:26:37
+info: GET en /loggerTest - at 25/10/2023 - 12:26:40
+info: GET en /loggerTest - at 25/10/2023 - 12:49:08
+info: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:49:17
+warning: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:49:24
+error: Alerta
+info: GET en /loggerTest - at 25/10/2023 - 12:49:31
+fatal: Alerta

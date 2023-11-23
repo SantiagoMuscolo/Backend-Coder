@@ -1,0 +1,79 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos (solo admin).
+      tags:
+        - Products
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+          description: Lista de productos recuperada exitosamente.
+        "500":
+          description: Error al obtener los productos.
+    post:
+      summary: Crear un producto (solo admin).
+      tags:
+        - Products
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+          description: Producto creado exitosamente.
+        "500":
+          description: Error al crear el producto.
+  api/products/{pid}:
+    get:
+      summary: Obtiene el producto por el id (solo admin).
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Producto obtenido exitosamente.
+        "500":
+          description: Error al obtener el producto.
+    put:
+      summary: actualizar el producto (solo admin).
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                thumbnails:
+                  type: array
+                  items:
+                    type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                code:
+                  type: string
+                stock:
+                  type: integer
+      responses:
+        "200":
+          description: Producto actualizado exitosamente.
+        "500":
+          description: Error al actualizar el producto.
+    delete:
+      summary: Elimina un producto (solo admin).
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Producto eliminado exitosamente.
+        "500":
+          description: Error al eliminar el producto.
+
+
