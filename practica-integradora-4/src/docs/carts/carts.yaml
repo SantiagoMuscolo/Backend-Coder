@@ -1,0 +1,172 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos disponibles.
+      tags:
+        - Carts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+          description: Lista de carritos recuperada exitosamente.
+        "500":
+          description: Error al obtener los carritos.
+
+    post:
+      summary: Crea un carrito.
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito creado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carrito creado
+                  products:
+                    type: array
+                    description: Lista de productos en el carrito
+                    items:
+                      type: object
+                  __v:
+                    type: integer
+                    description: Versión del carrito
+        "500":
+          description: Error al crear carrito.
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene los productos disponibles en ese carrito.
+      tags:
+        - Carts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Lista de productos en el carrito recuperada exitosamente.
+        "404":
+          description: Parámetro inválido.
+
+    delete:
+      summary: Elimina un carrito.
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito eliminado exitosamente.
+        "500":
+          description: Error al eliminar el carrito.
+
+    put:
+      summary: Modifica los productos de un carrito.
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newProducts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      price:
+                        type: number
+                      thumbnails:
+                        type: array
+                        items:
+                          type: string
+                      code:
+                        type: string
+                      stock:
+                        type: integer
+                      quantity:
+                        type: integer
+      responses:
+        "200":
+          description: Producto actualizado exitosamente.
+        "500":
+          description: Error al actualizar el producto.
+
+  /api/carts/products:
+     post:
+      summary: Crea un producto dentro de un carrito.
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Producto creado exitosamente.
+        "500":
+          description: Error al crear el producto.
+
+  /api/carts/{cid}/products/{pid}:
+    delete:
+      summary: Elimina un producto de un carrito.
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Producto eliminado exitosamente.
+        "500":
+          description: Error al eliminar el producto.
+
+    put:
+      summary: Actualiza un producto especifico dentro del carrito.
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                thumbnails:
+                  type: array
+                  items:
+                    type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                code:
+                  type: string
+                stock:
+                  type: integer
+      responses:
+        "200":
+          description: Producto actualizado exitosamente.
+        "500":
+          description: Error al actualizar el producto.
+
+  /api/carts/{cid}/purchase:
+    put:
+      summary: Finaliza la compra de un carrito.
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Compra realizada con éxito.
+        "500":
+          description: Error al finalizar la compra.

@@ -1,0 +1,148 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="bg-white rounded p-3 product-list flex-column align-items-center shadow">
+    <h1 class="text-dark">Product List</h1>
+    <ul class="list-group">
+      {{#each products}}
+      <li class="list-group-item text-dark d-flex justify-content-between align-items-center">
+        <span class="mr-3">{{this.title}}</span>
+        <div>
+          <a href="/products/{{this.id}}" class="btn btn-primary btn-sm">View Details</a>
+          <button class="btn btn-success btn-sm ml-2 add-to-cart" data-product-id="{{this.id}}" data-product-title="
+            {{this.title}}" data-product-price="{{this.price}}">Add to
+            Cart</button>
+          <button type="button" id="btn-delete" class="btn btn-danger btn-sm ml-2 add-to-cart" data-product-id="{{this.id}}">Delete
+            Product</button>
+        </div>
+      </li>
+      {{/each}}
+      <form id="productForm" class="mt-3">
+        <div class="form-group">
+          <input type="text" class="form-control" id="title" placeholder="Title" required>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="code" placeholder="Code" required>
+        </div>
+        <div class="form-group">
+          <input type="number" class="form-control" id="price" placeholder="Price" required>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="stock" placeholder="stock" required>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="description" placeholder="description" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+      </form>
+    </ul>
+
+    <div class="mt-3">
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {{#if hasPrevPage}}
+          <li class="page-item">
+            <a class="page-link text-black" href="{{prevPageLink}}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              {{page}}
+            </a>
+          </li>
+          {{/if}}
+
+          {{#if hasNextPage}}
+          <p class="text-white">batata</p>
+          <li class="page-item">
+            <a class="page-link text-black" href="{{nextPageLink}}" aria-label="Next">
+              {{page}}
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {{/if}}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script>
+  const addToCartButtons = document.querySelectorAll('.add-to-cart');
+  addToCartButtons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+      const productId = event.target.getAttribute('data-product-id');
+      const productTitle = event.target.getAttribute('data-product-title');
+      const productPrice = event.target.getAttribute('data-product-price');
+      const productStock = event.target.getAttribute('data-product-stock');
+      const productDescription = event.target.getAttribute('data-product-description');
+
+      const product = {
+        id: productId,
+        title: productTitle,
+        price: parseFloat(productPrice),
+        stock: productStock,
+        description: productDescription
+      };
+
+      try {
+        const response = await fetch(`/api/carts/products`, {
+          method: "POST",
+          headers: { "Content-type": "application/json; charset=UTF-8" },
+          body: JSON.stringify(product)
+        });
+        console.log(response);
+      } catch (error) {
+        console.error('Error al realizar la solicitud POST:', error);
+      }
+    });
+  });
+
+  const productForm = document.getElementById("productForm");
+  productForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const title = document.getElementById("title").value;
+    const code = document.getElementById("code").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const stock = document.getElementById("stock").value;
+    const description = document.getElementById("description").value;
+
+    if (!title || !code || isNaN(price) || price <= 0 || !stock || !description) {
+      alert("Por favor, ingrese información válida.");
+      return;
+    }
+
+    const productData = {
+      title,
+      code,
+      price,
+      stock,
+      description
+    };
+
+    try {
+      const response = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      });
+
+      if (response.status === 201) {
+        document.getElementById("title").value = "";
+        document.getElementById("code").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("stock").value = "";
+        document.getElementById("description").value = "";
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud POST:", error);
+    }
+  });
+
+  const btnDelete = document.getElementById('btn-delete');
+  btnDelete.addEventListener('click', async (event) => {
+    const productId = btnDelete.getAttribute('data-product-id');
+    const res = await fetch(`/api/products/${productId}`, {
+      method: "DELETE",
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    });
+    console.log(res);
+  });
+</script>
